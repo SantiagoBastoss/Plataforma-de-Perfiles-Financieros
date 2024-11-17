@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import Bienvenida from './components/Bienvenida'
+import {ethers} from "ethers"
+import Persona from './components/Persona';
 
 function App() {
 
@@ -10,7 +12,33 @@ function App() {
     contract: null
   })
 
-  const [account, setAccount] = useState('Not connected')
+  const [account, setAccount] = useState('No se ha vinculado su billetera digital');
+
+  const [user, setUser] = useState('Not defined');
+
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const {ethereum} = window;
+
+  const asignar_cuenta = async()=>{
+
+    if(loggedIn){
+      alert("Ya hay una cuenta conectada");
+
+    } else {
+      const account = await ethereum.request({
+        method:"eth_requestAccounts"
+      })
+
+      window.ethereum.on("accountsChanged", ()=>{
+        window.location.reload()
+      })
+
+      setAccount(account);
+      setLoggedIn(true);
+    }
+  }
+
 
   useEffect(()=>{
     const template = async()=>{
@@ -19,17 +47,12 @@ function App() {
       const contractABI="";
 
       try {
-        const {ethereum} = window;
 
-        const account = await ethereum.request({
-          method:"eth_requestAccounts"
-        })
+        console.log(loggedIn);
 
-        window.ethereum.on("accountsChanged", ()=>{
-          window.location.reload()
-        })
-
-        setAccount(account);
+        if(!loggedIn){
+          asignar_cuenta();
+        }
 
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
@@ -51,11 +74,9 @@ function App() {
 
   return (
     <div className="App">
-      <img src={"./assets/logo.jpg"} className="img-fluid" alt=".." width="100%"/>
-      <p style={{ marginTop: "10px", marginLeft: "5px" }}>
-      <small>Connected Account: {account}</small>
-      </p>
-      <Bienvenida state={state}></Bienvenida>
+      <img src={"./assets/logo.jpg"} className="img-fluid" alt="" width="100%"/>
+      {loggedIn ? <Persona changeLoggedFalse={()=>{setLoggedIn(false); setAccount('null');}}/>: <Bienvenida account={account} loggedIn={loggedIn} changeLoggedTrue={()=>setLoggedIn(true)} asignarCuenta={asignar_cuenta}></Bienvenida>}
+      
     </div>
   )
 }
