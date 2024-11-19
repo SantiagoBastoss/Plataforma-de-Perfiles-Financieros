@@ -1,28 +1,95 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from './Navbar/Navbar';
 import Bienvenida from "./Bienvenida";
-import App from "../App";
+import { ethers } from "ethers";
+import abiPerfil from '../../../artifacts/contracts/Perfil.sol/Perfil.json';
 
-const Persona = ({changeLoggedFalse})=>{
+
+const Persona = ({contrat, changeLoggedFalse})=>{
+
+    
+    const registrarPersona = async () => {
+
+        if(typeof window.ethereum !== "undefined"){
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            const signer = provider.getSigner();
+            const contract = new ethers.Contract(
+                "0xd3ebDD76b4Bc0AEdC084bc40C0bbEA24DD4B7028",
+                abiPerfil.abi,
+                signer
+            );
+
+            //const transaction = await contract.registro("Carlos", 10392, "10/10/2003", "10/10/2021", 320434, "carlos@gmail.com");
+            //await transaction.wait();
+
+            await contract.registro("Carlos", 10392, "10/10/2003", "10/10/2021", 320434, "carlos@gmail.com");
+            alert("Registro exitoso");
+
+            try {
+                
+            } catch (error) {
+                
+            }
+        } else {
+            alert("Para ingresar al sistema debe primero conectar su cuenta de Metamask");
+        }
+    }
+    
+    
+    const funPru = async()=>{
+        //const [owner] = await ethers.getSigners();
+        const hardhatToken = await ethers.deployContract("Perfil");
+
+        const dire = await hardhatToken.getAddress();
+
+        console.log(hardhatToken);
+        console.log(dire);
+        //const transaction = await contrat.calcular_score();
+    }
+
     return <>
         <Navbar />
         <br></br>
         <br></br>
         <br></br>
+        <h1>Titulo prueba</h1>
+        <button onClick={registrarPersona}>Prueba Registro</button>
         <div className="column">
-        <main className="main-content">
-            <Routes>
-                <Route path="/" element={<Salir loggen={changeLoggedFalse}/>}/>
-                <Route path="/informacion-personal" element={<InfoPersonal />}/>
-                <Route path="/productos-financieros" element={<ProdsFinancieros />}/>
-                <Route path="/historial-de-reportes" element={<HistReportes />}/>
-                <Route path="/notificaciones" element={<Notificaciones />}/>
-            </Routes>
+            <main className="main-content">
+                <Routes>
+                    <Route path="/persona/perfil" element={<Perfil />}/>
+                    <Route path="/persona/informacion-personal" element={<InfoPersonal />}/>
+                    <Route path="/persona/productos-financieros" element={<ProdsFinancieros />}/>
+                    <Route path="/persona/historial-de-reportes" element={<HistReportes />}/>
+                    <Route path="/persona/notificaciones" element={<Notificaciones />}/>
+                </Routes>
         </main> 
         </div>
     </>
 }
 export default Persona;
+
+
+
+const Perfil = ()=>{
+
+    return <>
+        <h2> Mi Perfil </h2>
+        <div className="card">
+            <div className="card-body">
+                <div className="card-title"> Nombre </div>
+                <br></br>
+                <div className="card-content"> 
+                    <div className="row">
+                        Andres cARNE
+                        Score Bancario
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br></br>
+    </>
+}
 
 
 const InfoPersonal = ()=>{

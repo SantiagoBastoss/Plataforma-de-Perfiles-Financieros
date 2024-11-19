@@ -3,6 +3,11 @@ import './App.css'
 import Bienvenida from './components/Bienvenida'
 import {ethers} from "ethers"
 import Persona from './components/Persona';
+import abiPerfil from '../../artifacts/contracts/Perfil.sol/Perfil.json';
+import abiBanco from '../../artifacts/contracts/Banco.sol/Banco.json';
+import abiGroth16Verifier from '../../artifacts/contracts/Groth16Verifier.sol/Groth16Verifier.json';
+import abiVerificacion from '../../artifacts/contracts/Verificacion.sol/Verificacion.json';
+
 
 function App() {
 
@@ -12,13 +17,31 @@ function App() {
     contract: null
   })
 
-  const [account, setAccount] = useState('No se ha vinculado su billetera digital');
+  const [contractInstance, setContractInstance] = useState({
+    contrato: null 
+  })
+
+
+  //const contratos = {
+    //"registro": ["0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512", abiPerfil.abi],
+    //"banco": ["0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512", abiPerfil.abi]
+  //};
+
+
+  //const [account, setAccount] = useState('No se ha vinculado su billetera digital');
 
   const [user, setUser] = useState('Not defined');
 
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const {ethereum} = window;
+  //const {ethereum} = window;
+
+  async function requestAccount(){
+    
+    await window.ethereum.request({
+      method:"eth_requestAccounts"
+    });
+  }
 
   const asignar_cuenta = async()=>{
 
@@ -26,7 +49,7 @@ function App() {
       alert("Ya hay una cuenta conectada");
 
     } else {
-      const account = await ethereum.request({
+      const account = await window.ethereum.request({
         method:"eth_requestAccounts"
       })
 
@@ -34,48 +57,17 @@ function App() {
         window.location.reload()
       })
 
-      setAccount(account);
+      //setAccount(account);
       setLoggedIn(true);
     }
   }
 
 
-  useEffect(()=>{
-    const template = async()=>{
-
-      const contractAddress="";
-      const contractABI="";
-
-      try {
-
-        console.log(loggedIn);
-
-        if(!loggedIn){
-          asignar_cuenta();
-        }
-
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-
-        const contract = new ethers.Contract(
-          contractAddress,
-          contractABI,
-          signer
-        )
-
-        setState({provider, signer, contract});
-
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    template();
-  }, [])
 
   return (
     <div className="App">
       <img src={"./assets/logo.jpg"} className="img-fluid" alt="" width="100%"/>
-      {loggedIn ? <Persona changeLoggedFalse={()=>{setLoggedIn(false); setAccount('null');}}/>: <Bienvenida account={account} loggedIn={loggedIn} changeLoggedTrue={()=>setLoggedIn(true)} asignarCuenta={asignar_cuenta}></Bienvenida>}
+      {loggedIn ? <Persona contrat={contractInstance} changeLoggedFalse={()=>{setLoggedIn(false); setAccount('null');}}/>: <Bienvenida loggedIn={loggedIn} changeLoggedTrue={()=>setLoggedIn(true)} asignarCuenta={asignar_cuenta}></Bienvenida>}
       
     </div>
   )

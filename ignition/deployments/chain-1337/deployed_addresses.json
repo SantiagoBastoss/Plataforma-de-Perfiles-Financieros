@@ -1,0 +1,9 @@
+{
+  "BancoModule#Banco": "0xCceB4474686e2F64aCCF2ED04d037A6cf3C7dD58",
+  "PerfilModule#Perfil": "0x97965Fc1dF07df9b19Be3Dc9cb38834197bfEB9B",
+  "VerificacionModule#Verificacion": "0xC21D1F6fA0e7dEf9b7F61fc6A1cb27f123b7Bf42",
+  "ContratoBanco#Banco": "0x0E1BA9A49ac0896e8F912a76418e463e26222C9B",
+  "ContratoPerfil#Perfil": "0xd3ebDD76b4Bc0AEdC084bc40C0bbEA24DD4B7028",
+  "ContratoVerificacion#Verificacion": "0xbF6672F997086a6EEBa202aada1b3CEc71389907",
+  "ContratoGroth16Verifier#Groth16Verifier": "0xb417185787e5Dc3FEa815A7c31ab56D9C6b28f7C"
+}

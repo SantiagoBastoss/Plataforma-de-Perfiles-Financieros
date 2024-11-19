@@ -1,0 +1,255 @@
+{
+  "name": "Perfil",
+  "address": "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "celular",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "email",
+          "type": "string"
+        }
+      ],
+      "name": "actualizarInfo",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "calcular_score",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "nombre",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "documento",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "nacimiento",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "expedicion",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "celular",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "email",
+          "type": "string"
+        }
+      ],
+      "name": "registro",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "usuario",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "entidad",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "producto",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "motivo",
+          "type": "string"
+        },
+        {
+          "internalType": "bool",
+          "name": "negativo",
+          "type": "bool"
+        }
+      ],
+      "name": "reportar_usuario",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "perfiles",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "nombre",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "documento",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "nacimiento",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "expedicion",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct Perfil.InfoConstante",
+          "name": "infoConst",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "celular",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "email",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct Perfil.InfoVariable",
+          "name": "infoVar",
+          "type": "tuple"
+        },
+        {
+          "internalType": "uint256",
+          "name": "scoreBancario",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "productos",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "tipo",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "entidad",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "saldo",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "mora",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "reportes",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "entidad",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "producto",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "motivo",
+          "type": "string"
+        },
+        {
+          "internalType": "bool",
+          "name": "negativo",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "filePath": " - connect to localhost - /contracts/Perfil.sol",
+  "pinnedAt": 1731854199594
+}

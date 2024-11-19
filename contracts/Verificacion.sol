@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.27;
+pragma solidity ^0.8.26;
 
-import './verifier.sol';
+import './Groth16Verifier.sol';
 
 
 contract Verificacion{

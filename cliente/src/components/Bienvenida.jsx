@@ -1,6 +1,33 @@
 import React, {useCallback} from 'react'
+import { useState } from 'react'
 
-const Bienvenida = ({account, loggedIn, changeLoggedTrue, asignarCuenta})=>{
+const Bienvenida = ({accunt, logIn, changeLoggedTrue, asignarCuenta})=>{
+
+    const [account, setAccount] = useState('No se ha vinculado su billetera digital');
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    const requestAccount = async () => {
+
+        if(loggedIn){
+            alert("Ya se ha conectado su cuenta de Metamask. Seleccione ingresar, según su perfil.")
+        } else {
+            const cuenta = await window.ethereum.request({
+                method:"eth_requestAccounts"
+            });
+            setAccount(cuenta);
+            setLoggedIn(true);
+            alert("Cuenta conectada exitosamente");
+        }
+    }
+
+    const ingresoPersona = async () => {
+
+        if(loggedIn){
+            changeLoggedTrue();
+        } else {
+            alert("Para ingresar al sistema debe primero conectar su cuenta de Metamask");
+        }
+    }
 
     return <>
         <h1> Plataforma de perfiles financieros </h1>
@@ -8,7 +35,7 @@ const Bienvenida = ({account, loggedIn, changeLoggedTrue, asignarCuenta})=>{
             <small>Cuenta conectada: {account}</small>
         </p>
         <br></br>
-        <button onClick={asignarCuenta}> Conectar con Metamask </button>
+        <button onClick={requestAccount}> Conectar con Metamask </button>
         <p></p>
         <br></br>
         <div className="row">
@@ -31,7 +58,7 @@ const Bienvenida = ({account, loggedIn, changeLoggedTrue, asignarCuenta})=>{
                     <br></br>
                     <div className="card-content"> 
                         <div className="row">
-                            <button onClick={changeLoggedTrue}>Ingresar</button>
+                            <button onClick={ingresoPersona}>Ingresar</button>
                             <button>Registro</button>
                         </div>
                     </div>

@@ -7,7 +7,7 @@ const Navbar = ()=>{
     return <>
         <header className="header">
             <nav className="nav">
-                <NavLink to="/" className="nav__logo">
+                <NavLink to="/persona/perfil" className="nav__logo">
                     PPF
                 </NavLink>
 
@@ -15,22 +15,22 @@ const Navbar = ()=>{
                     
                     <ul className="nav__list">
                         <li className="nav__item">
-                            <NavLink to="/informacion-personal" className="nav__link">
+                            <NavLink to="/persona/informacion-personal" className="nav__link">
                                 Información Personal
                             </NavLink>
                         </li>
                         <li className="nav__item">
-                            <NavLink to="/productos-financieros" className="nav__link">
+                            <NavLink to="/persona/productos-financieros" className="nav__link">
                                 Productos Financieros
                             </NavLink>
                         </li>
                         <li className="nav__item">
-                            <NavLink to="/historial-de-reportes" className="nav__link">
+                            <NavLink to="/persona/historial-de-reportes" className="nav__link">
                                 Historial de Reportes
                             </NavLink>
                         </li>
                         <li className="nav__item">
-                            <NavLink to="/notificaciones" className="nav__link">
+                            <NavLink to="/persona/notificaciones" className="nav__link">
                                 Notificaciones
                             </NavLink>
                         </li>
