@@ -4,25 +4,24 @@ import Bienvenida from "./Bienvenida";
 import { ethers } from "ethers";
 import abiPerfil from '../../../artifacts/contracts/Perfil.sol/Perfil.json';
 
-
 const Persona = ({contrat, changeLoggedFalse})=>{
 
-    
     const registrarPersona = async () => {
 
         if(typeof window.ethereum !== "undefined"){
+
             const provider = new ethers.BrowserProvider(window.ethereum);
-            const signer = provider.getSigner();
+            const signer = await provider.getSigner();
+            console.log(signer);
             const contract = new ethers.Contract(
                 "0xd3ebDD76b4Bc0AEdC084bc40C0bbEA24DD4B7028",
                 abiPerfil.abi,
-                signer
+                signer,
             );
 
-            //const transaction = await contract.registro("Carlos", 10392, "10/10/2003", "10/10/2021", 320434, "carlos@gmail.com");
-            //await transaction.wait();
+            const transaction = await contract.registro("Carlos", 10392, "10/10/2003", "10/10/2021", 320434, "carlos@gmail.com");
+            await transaction.wait();
 
-            await contract.registro("Carlos", 10392, "10/10/2003", "10/10/2021", 320434, "carlos@gmail.com");
             alert("Registro exitoso");
 
             try {
