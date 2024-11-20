@@ -1,46 +1,68 @@
 import { Outlet } from "react-router-dom";
 import Navbar from './Navbar/Navbar';
 import { ethers } from "ethers";
+import { useEffect, useState } from "react";
 import abiPerfil from '../../../../artifacts/contracts/Perfil.sol/Perfil.json';
+
 
 const Persona = ()=>{
 
-    const registrarPersona = async () => {
+    const [usuario, setUsuario] = useState({
+        nombre: null,
+        documento: null,
+        fechaNacimiento: null,
+        fechaExpedicion: null,
+        celular: null,
+        correo: null,
+    });
 
-        if(typeof window.ethereum !== "undefined"){
+    useEffect(() => {
+
+        const llama = async ()=>{
 
             const provider = new ethers.BrowserProvider(window.ethereum);
             const signer = await provider.getSigner();
-            console.log(signer);
+                
             const contract = new ethers.Contract(
-                "0xd3ebDD76b4Bc0AEdC084bc40C0bbEA24DD4B7028",
+                "0xC21D1F6fA0e7dEf9b7F61fc6A1cb27f123b7Bf42",
                 abiPerfil.abi,
                 signer,
             );
 
-            const transaction = await contract.registro("Carlos", 10392, "10/10/2003", "10/10/2021", 320434, "carlos@gmail.com");
-            await transaction.wait();
+            const resultado = await contract.darInfo();
+            console.log("=========");
+            console.log(resultado);
+            console.log("=========");
 
-            alert("Registro exitoso");
-        } else {
-            alert("Para ingresar al sistema debe primero conectar su cuenta de Metamask");
+            const nombre = resultado[0][0];
+            const documento = resultado[0][1];
+            const fechaNacimiento = resultado[0][2];
+            const fechaExpedicion = resultado[0][3];
+
+            const celular = resultado[1][0];
+            const correo = resultado[1][1];
+
+            setUsuario({nombre, documento, fechaNacimiento, fechaExpedicion, celular, correo});
+            console.log({usuario});
         }
-    }
+
+        llama();
+    }, []);
+    
     
     return <>
         <Navbar/>
         <br></br>
         <br></br>
         <br></br>
-        <Perfil/> 
-        <Outlet/>
-        <button onClick={registrarPersona}>Prueba Registro</button>
+        <Perfil usuario={usuario}/> 
+        <Outlet />
     </>
 }
 export default Persona;
 
 
-const Perfil = ()=>{
+const Perfil = ({usuario})=>{
 
     return <>
         <h2> Mi Perfil </h2>
@@ -50,8 +72,7 @@ const Perfil = ()=>{
                 <br></br>
                 <div className="card-content"> 
                     <div className="row">
-                        Andres cARNE
-                        Score Bancario
+                        {usuario.nombre}
                     </div>
                 </div>
             </div>

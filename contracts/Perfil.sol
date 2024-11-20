@@ -48,6 +48,11 @@ contract Perfil{
     constructor(){
         owner = payable(msg.sender);
     }
+
+    function darInfo() view external returns (Usuario memory infoUsuario){
+        infoUsuario = perfiles[msg.sender];
+        return infoUsuario;
+    }
     
 
     function registro(string calldata nombre, uint documento, string calldata nacimiento, string calldata expedicion, uint celular, string calldata email) external {

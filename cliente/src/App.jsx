@@ -21,8 +21,7 @@ function App() {
 
   const [state, setState] = useState({
     provider: null,
-    signer: null,
-    contract: null
+    signer: null
   })
 
   //const contratos = {
