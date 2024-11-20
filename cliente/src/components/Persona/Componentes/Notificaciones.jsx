@@ -1,7 +1,7 @@
-import React, {useCallback} from 'react'
-import { useEffect, useState } from 'react'
+import React from 'react'
+import { useState } from 'react'
 
-const Registro = ()=>{
+const Notificaciones = ()=>{
 
     const registrarPersona = async () => {
 
@@ -13,7 +13,7 @@ const Registro = ()=>{
     }
 
     return <>
-        
+        <p>Notificaciones</p>
     </>
 }
-export default Registro;
+export default Notificaciones;

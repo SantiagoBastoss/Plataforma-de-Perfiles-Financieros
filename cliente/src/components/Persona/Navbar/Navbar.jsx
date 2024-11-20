@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
-import { IoClose, IoMenu } from "react-icons/io5";
 import "./Navbar.css";
 
 const Navbar = ()=>{
     return <>
         <header className="header">
             <nav className="nav">
-                <NavLink to="/persona/perfil" className="nav__logo">
+                <NavLink to="/persona" className="nav__logo">
                     PPF
                 </NavLink>
 
