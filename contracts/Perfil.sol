@@ -42,8 +42,10 @@ contract Perfil{
 
     mapping(address=>Producto[]) public productos;
 
+    address[] public usuarios;
 
     address payable owner;
+    
 
     constructor(){
         owner = payable(msg.sender);
@@ -54,6 +56,18 @@ contract Perfil{
         return infoUsuario;
     }
     
+    function usuarioRegistrado() view external returns (bool registrado){
+
+        registrado = false;
+
+        for(uint i=0; i<usuarios.length; i++){
+            if(usuarios[i] == msg.sender){
+                registrado = true;
+            }
+        }
+
+        return registrado;
+    }
 
     function registro(string calldata nombre, uint documento, string calldata nacimiento, string calldata expedicion, uint celular, string calldata email) external {
         

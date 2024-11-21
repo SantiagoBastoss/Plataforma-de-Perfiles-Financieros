@@ -1,35 +1,16 @@
 import React from 'react'
-import { useState } from 'react'
 
-const InfoPersonal = ()=>{
-
-    const registrarPersona = async () => {
-
-        if(loggedIn){
-            changeLoggedTrue();
-        } else {
-            alert("Para ingresar al sistema debe primero conectar su cuenta de Metamask");
-        }
-    }
+const InfoPersonal = ({user})=>{
 
     return <>
         <h2>Información Personal </h2>
-        <div className="card">
-            <div className="card-body">
-                <div className="card-title"> Nombre </div>
-                <br></br>
-                <div className="card-content"> 
-                    Nombre Prueba
-                </div>
-            </div>
-        </div>
         <br></br>
         <div className="card">
             <div className="card-body">
                 <div className="card-title"> Número de documento </div>
                 <br></br>
                 <div className="card-content"> 
-                    321039201
+                    {String(user.documento)}
                 </div>
             </div>
         </div>
@@ -39,7 +20,7 @@ const InfoPersonal = ()=>{
                 <div className="card-title"> Fecha de Nacimiento </div>
                 <br></br>
                 <div className="card-content"> 
-                    10/10/2003
+                    {user.fechaNacimiento}
                 </div>
             </div>
         </div>
@@ -49,7 +30,7 @@ const InfoPersonal = ()=>{
                 <div className="card-title"> Fecha de Expedición de la cédula </div>
                 <br></br>
                 <div className="card-content"> 
-                    10/10/2021
+                    {user.fechaExpedicion}
                 </div>
             </div>
         </div>
@@ -59,7 +40,7 @@ const InfoPersonal = ()=>{
                 <div className="card-title"> Celular </div>
                 <br></br>
                 <div className="card-content"> 
-                    3201853772
+                    {String(user.celular)}
                 </div>
             </div>
         </div>
@@ -69,7 +50,7 @@ const InfoPersonal = ()=>{
                 <div className="card-title"> Correo electrónico </div>
                 <br></br>
                 <div className="card-content"> 
-                    prueba@gmail.com
+                    {user.correo}
                 </div>
             </div>
         </div>

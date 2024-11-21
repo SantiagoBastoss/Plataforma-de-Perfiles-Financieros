@@ -1,46 +1,30 @@
-import { useState } from 'react'
 import './App.css'
+import Home from './components/Home';
+import Persona from './components/Persona/Persona';
+import Registro from './components/Persona/Registro';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import abiPerfil from '../../artifacts/contracts/Perfil.sol/Perfil.json';
 import abiBanco from '../../artifacts/contracts/Banco.sol/Banco.json';
 import abiGroth16Verifier from '../../artifacts/contracts/Groth16Verifier.sol/Groth16Verifier.json';
 import abiVerificacion from '../../artifacts/contracts/Verificacion.sol/Verificacion.json';
 
-import Bienvenida from './components/Home'
-import Persona from './components/Persona/Persona';
-import Registro from './components/Persona/Registro';
-import HistReportes from './components/Persona/Componentes/HistReportes';
-import InfoPersonal from './components/Persona/Componentes/InfoPersonal';
-import Notificaciones from './components/Persona/Componentes/Notificaciones';
-import ProdsFinancieros from './components/Persona/Componentes/ProdsFinancieros';
-
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
 
 function App() {
 
-  const [state, setState] = useState({
-    provider: null,
-    signer: null
-  })
-
-  //const contratos = {
-    //"registro": ["0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512", abiPerfil.abi],
-    //"banco": ["0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512", abiPerfil.abi]
-  //};
-
+  const contratos = {
+    perfil: ["0x0E1BA9A49ac0896e8F912a76418e463e26222C9B", abiPerfil.abi],
+    banco: ["", abiBanco.abi],
+    verifier: ["", abiGroth16Verifier.abi],
+    verificacion: ["", abiVerificacion.abi],
+  };
 
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Bienvenida />}/>
-        <Route path="persona/registro" element={<Registro />}/>
-        <Route path="persona" element={<Persona />}>
-          <Route path="informacion-personal" element={<InfoPersonal />}/>
-          <Route path="productos-financieros" element={<ProdsFinancieros />}/>
-          <Route path="historial-de-reportes" element={<HistReportes />}/>
-          <Route path="notificaciones" element={<Notificaciones />}/>
-        </Route>
+        <Route path="/" element={<Home contratos={contratos}/>}/>
+        <Route path="/persona/registro" element={<Registro contratos={contratos}/>}/>
+        <Route path="/persona/*" element={<Persona infoContratos={contratos}/>}/>
       </Routes>
     </Router>
   )

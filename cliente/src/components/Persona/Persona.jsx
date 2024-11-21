@@ -1,11 +1,15 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Routes, Route } from "react-router-dom";
 import Navbar from './Navbar/Navbar';
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
-import abiPerfil from '../../../../artifacts/contracts/Perfil.sol/Perfil.json';
+
+import HistReportes from './Componentes/HistReportes';
+import InfoPersonal from './Componentes/InfoPersonal';
+import Notificaciones from './Componentes/Notificaciones';
+import ProdsFinancieros from './Componentes/ProdsFinancieros';
 
 
-const Persona = ()=>{
+const Persona = ({infoContratos})=>{
 
     const [usuario, setUsuario] = useState({
         nombre: null,
@@ -16,6 +20,13 @@ const Persona = ()=>{
         correo: null,
     });
 
+    const [contratoActual, setContratoActual] = useState({
+        provider: null,
+        signer: null,
+        contract: null,
+      })
+
+
     useEffect(() => {
 
         const llama = async ()=>{
@@ -24,8 +35,8 @@ const Persona = ()=>{
             const signer = await provider.getSigner();
                 
             const contract = new ethers.Contract(
-                "0xC21D1F6fA0e7dEf9b7F61fc6A1cb27f123b7Bf42",
-                abiPerfil.abi,
+                infoContratos.perfil[0],
+                infoContratos.perfil[1],
                 signer,
             );
 
@@ -43,6 +54,13 @@ const Persona = ()=>{
             const correo = resultado[1][1];
 
             setUsuario({nombre, documento, fechaNacimiento, fechaExpedicion, celular, correo});
+
+            setContratoActual({
+                provider: provider,
+                signer: signer,
+                contract: contract,
+            });
+
             console.log({usuario});
         }
 
@@ -52,11 +70,20 @@ const Persona = ()=>{
     
     return <>
         <Navbar/>
+        
         <br></br>
         <br></br>
         <br></br>
+
         <Perfil usuario={usuario}/> 
         <Outlet />
+
+        <Routes>
+          <Route path="/informacion-personal" element={<InfoPersonal user={usuario}/>}/>
+          <Route path="/productos-financieros" element={<ProdsFinancieros />}/>
+          <Route path="/historial-de-reportes" element={<HistReportes />}/>
+          <Route path="/notificaciones" element={<Notificaciones />}/>
+        </Routes>
     </>
 }
 export default Persona;

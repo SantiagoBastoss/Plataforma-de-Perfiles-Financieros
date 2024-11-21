@@ -1,10 +1,9 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-import abiPerfil from '../../../../artifacts/contracts/Perfil.sol/Perfil.json';
+import { useState } from 'react';
 import {ethers} from 'ethers';
 import { useNavigate } from 'react-router-dom';
 
-const Registro = ()=>{
+const Registro = ({contratos})=>{
 
     const [account, setAccount] = useState('Vincule su billetera digital');
 
@@ -27,8 +26,8 @@ const Registro = ()=>{
             const signer = await provider.getSigner();
             
             const contract = new ethers.Contract(
-                "0xC21D1F6fA0e7dEf9b7F61fc6A1cb27f123b7Bf42",
-                abiPerfil.abi,
+                contratos.perfil[0],
+                contratos.perfil[1],
                 signer,
             );
 
@@ -56,12 +55,7 @@ const Registro = ()=>{
         setAccount(cuenta);
         alert("Cuenta conectada exitosamente");
     }
-
-
-    /* useEffect(() => {
-        alert("Si entra");
-        requestAccount();
-    }, []); */
+    
 
     return <>
         <h2>Registro Persona</h2>

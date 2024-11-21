@@ -1,12 +1,20 @@
 import React from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import {ethers} from 'ethers';
 
-const Home = ()=>{
+
+const Home = ({contratos})=>{
 
     const [account, setAccount] = useState('No se ha vinculado su billetera digital');
     const [loggedIn, setLoggedIn] = useState(false);
     const navigate = useNavigate();
+
+    const etherUser = {
+        provider: null,
+        signer: null,
+    };
+    
 
     const requestAccount = async () => {
 
@@ -30,7 +38,26 @@ const Home = ()=>{
     const ingresoPersona = async () => {
 
         if(loggedIn){
-            navigate("/persona");
+
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            const signer = await provider.getSigner();
+                    
+            const contractoPerfil = new ethers.Contract(
+                contratos.perfil[0],
+                contratos.perfil[1],
+                signer,
+            );
+
+            const usuarioRegistrado = await contractoPerfil.usuarioRegistrado();
+
+            console.log(usuarioRegistrado);
+
+            if(usuarioRegistrado){
+                navigate("/persona");
+            } else {
+                alert("Su cuenta Metamask no está asociada a ningún usuario dentro de la aplicación. Haga click en el botón de Registro.");
+            }
+
         } else {
             alert("Para ingresar al sistema debe primero conectar su cuenta de Metamask");
         }
