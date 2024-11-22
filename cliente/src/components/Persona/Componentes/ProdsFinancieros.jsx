@@ -1,15 +1,22 @@
 import React from 'react'
 import { useState } from 'react'
 
-const ProdsFinancieros = ()=>{
+const ProdsFinancieros = ({infoContratos})=>{
 
-    const registrarPersona = async () => {
+    const cargarProductos = async () => {
 
-        if(loggedIn){
-            changeLoggedTrue();
-        } else {
-            alert("Para ingresar al sistema debe primero conectar su cuenta de Metamask");
-        }
+        const claveUsuario = prompt("Ingresa la clave que tienes en ese banco: ");
+
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+                
+        const contract = new ethers.Contract(
+            infoContratos.perfil[0],
+            infoContratos.perfil[1],
+            signer,
+        );
+
+        const resultado = await contract.darInfo();
     }
 
     return <>
@@ -20,8 +27,8 @@ const ProdsFinancieros = ()=>{
                 <br></br>
                 <div className="card-content"> 
                     <div className="row">
-                        Escriba el NIT de su entidad:
-                        <input></input>
+                        Escriba el NIT de la entidad:
+                        <input id="nit"></input>
                     </div>
                     <br></br>
                     <button>Consultar</button>

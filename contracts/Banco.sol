@@ -7,17 +7,17 @@ import './Verificacion.sol';
 
 contract Banco{
 
-    string nombre;
-    uint public nit;
-    uint clave;
-    bool pruebaGenerada;
-    Verificacion zkp;
+    address payable owner;
 
-    constructor(string memory _nombre, uint _nit, uint _clave){
-        nombre = _nombre;
-        nit = _nit;
-        clave = _clave;
-        pruebaGenerada = false;
+    constructor(){
+        owner = payable(msg.sender);
+    }
+
+    struct Entidad{
+        string nombre;
+        uint nit;
+        uint clave;
+        bool pruebaGenerada;
     }
 
     struct Cliente{
@@ -34,63 +34,75 @@ contract Banco{
         uint saldo;
     }
 
-    mapping(address=>Cliente) public clientes;
+    mapping(address=>Entidad) public bancos;
 
-    mapping(address=>Producto[]) public productos;
+    mapping(address=>Cliente[]) public clientes;
 
-    mapping(uint=>address) public direcciones;
+    mapping(uint=>Verificacion) public pruebas;
+
+    mapping(uint=>address) public direccionesBancos;
+
+    mapping(address=>mapping(uint=>Producto[])) public productos;
 
 
-    function info_productos(uint _docCliente, uint _claveCliente) external view returns(Producto[] memory prods) {
-
-        if(pruebaGenerada){
-            uint256 secret_k = calcular_clave_secreta((_docCliente+nit), _claveCliente, clave);
-
-            if(zkp.realizar_verificacion(secret_k, _docCliente, _claveCliente)){
-                prods = productos[msg.sender];
-                return (prods);
-            }
-        }
-    }
-
-    function info_cliente(uint _docCliente, uint _claveCliente) external view returns(string memory nom, uint doc, string memory nac, string memory exp) {
-
-        if(pruebaGenerada){
-            uint256 secret_k = calcular_clave_secreta((_docCliente+nit), _claveCliente, clave);
-
-            if(zkp.realizar_verificacion(secret_k, _docCliente, _claveCliente)){
-                return (clientes[msg.sender].nombre, clientes[msg.sender].documento, clientes[msg.sender].nacimiento, clientes[msg.sender].expedicion);
-            } else{
-                return ("The ZKP is not yet approved by the bank", secret_k, "", "");
-            }
-        } else {
-            return ("El banco aun no ha desplegado una ZKP propia", 0, "", "");
-        }
-    }
-
-    function set_prueba() public {
-        zkp = new Verificacion(nit, clave);
-        pruebaGenerada = true;
-    }
-
-    function calcular_clave_secreta(uint _a, uint _b, uint _c) public pure returns (uint256 clave_sec) {
-
-        uint256 a = uint256(_a);
-        uint256 b = uint256(_b);
-        uint256 c = uint256(_c);
-
-        clave_sec = ((((b+c)*a)+3)+(a+b+c)+((((b+c)*a)+3)*3))*(a+3);
-        return clave_sec;
+    function registro_banco(string calldata _nombre, uint _nit, uint _clave) external {
+        
+        bancos[msg.sender] = Entidad(_nombre, _nit, _clave, false);
+        direccionesBancos[_nit] = msg.sender;
     }
 
     //TODO: Hacer cambio a for para registrar todos los clientes (Si no se tiene DB externa)
-    function agregar_cliente(address dirCliente, string calldata _nombre, uint _documento, string calldata _nacimiento, string calldata _expedicion, uint _claveIngreso) external {
+    function agregar_cliente(string calldata _nombre, uint _documento, string calldata _nacimiento, string calldata _expedicion, uint _claveIngreso) external {
+
         Cliente memory nuevoCliente = Cliente(_nombre, _documento, _nacimiento, _expedicion, _claveIngreso);
-        clientes[dirCliente] = nuevoCliente;
+        clientes[msg.sender].push(nuevoCliente);
     }
 
-    function agregar_producto(address dirCliente, string calldata _numero, string calldata _tipo, uint _saldo) external {
+    function agregar_producto_cliente(uint _cedula, string calldata _numero, string calldata _tipo, uint _saldo) external {
+
         Producto memory nuevoProducto = Producto(_numero, _tipo, _saldo);
-        productos[dirCliente].push(nuevoProducto);
+        productos[msg.sender][_cedula].push(nuevoProducto);
+    }
+
+    function dar_productos_cliente(uint _cedula, uint _nitIngresado, uint _claveIngresada) external view returns (Producto[] memory listaProductos){
+
+        address dirBanco = direccionesBancos[_nitIngresado];
+
+        if(bancos[dirBanco].pruebaGenerada){
+            if(realizar_zkp(_cedula, _nitIngresado, _claveIngresada, dirBanco)){
+
+                listaProductos = productos[dirBanco][_cedula];
+            }
+        }
+        return listaProductos;
+    }
+
+    function generar_prueba() external payable {
+        require(msg.value==20, "El precio para generar una ZKP es de 20 ETH");
+
+        uint nitBanco = bancos[msg.sender].nit;
+
+        Verificacion nueva_prueba = new Verificacion(nitBanco, bancos[msg.sender].clave); 
+        pruebas[nitBanco] = nueva_prueba;
+
+        bancos[msg.sender].pruebaGenerada = true;
+
+        owner.transfer(msg.value);
+    }
+
+    function realizar_zkp(uint _cedula, uint _nitIngresado, uint _claveIngresada, address dirBanco) public view returns(bool resultado) {
+
+        Verificacion pruebaBanco = pruebas[_nitIngresado];
+        uint _claveReal;
+
+        for(uint i=0; i<clientes[dirBanco].length; i++){
+
+            if(clientes[dirBanco][i].documento == _cedula){
+                _claveReal = clientes[dirBanco][i].claveIngreso;
+            }
+        }
+        
+        resultado = pruebaBanco.verificar_zkp(_cedula, _claveReal, _claveIngresada);
+        return resultado;
     }
 }
