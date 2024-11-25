@@ -63,6 +63,34 @@ const Home = ({contratos})=>{
         }
     }
 
+    const ingresoBanco = async () => {
+
+        if(loggedIn){
+
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            const signer = await provider.getSigner();
+                    
+            const contratoBanco = new ethers.Contract(
+                contratos.banco[0],
+                contratos.banco[1],
+                signer,
+            );
+
+            const bancoRegistrado = await contratoBanco.bancoRegistrado();
+
+            console.log(bancoRegistrado);
+
+            if(bancoRegistrado){
+                navigate("/banco");
+            } else {
+                alert("Su cuenta Metamask no está asociada a ningún usuario dentro de la aplicación. Haga click en el botón de Registro.");
+            }
+
+        } else {
+            alert("Para ingresar al sistema debe primero conectar su cuenta de Metamask");
+        }
+    }
+
 
     return <>
         <h1> Plataforma de perfiles financieros </h1>
@@ -80,8 +108,8 @@ const Home = ({contratos})=>{
                         <br></br>
                         <div className="card-content"> 
                             <div className="row">
-                                <button>Ingresar</button>
-                                <button>Registro</button>
+                                <button onClick={ingresoBanco}>Ingresar</button>
+                                <button onClick={()=>{navigate("/banco/registro")}}>Registro</button>
                             </div>
                         </div>
                     </div>

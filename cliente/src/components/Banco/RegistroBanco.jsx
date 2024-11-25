@@ -9,7 +9,7 @@ const RegistroBanco = ({contratos})=>{
 
     const navigate = useNavigate();
 
-    const registrarBanco = async () => {
+    const registrar_banco = async () => {
 
         const nombre = document.querySelector("#name").value;
         const nit = Number(document.querySelector("#nit").value);
@@ -26,11 +26,11 @@ const RegistroBanco = ({contratos})=>{
                 signer,
             );
 
-            const transaction = await contract.registro(nombre, documento, fechaNacimiento, fechaExpedicion, celular, correo);
-            await transaction.wait();
+            const transaction = await contract.registro_banco(nombre, nit, clave);
+            transaction.wait();
 
             alert("Registro exitoso");
-            navigate("/persona")
+            navigate("/banco")
 
         } else {
             alert("Para ingresar al sistema debe primero conectar su cuenta de Metamask");
@@ -86,7 +86,7 @@ const RegistroBanco = ({contratos})=>{
                     </div>
                     <br></br>
                     <br></br>
-                    <button onClick={registrarBanco}>Enviar</button>
+                    <button onClick={registrar_banco}>Enviar</button>
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 const { buildModule } = require("@nomicfoundation/hardhat-ignition/modules");
 
-module.exports = buildModule("ContratoPerfil2", (m) => {
+module.exports = buildModule("ContratoPerfil12", (m) => {
 
   const contrato = m.contract("Perfil", []);
 

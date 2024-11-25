@@ -3,21 +3,19 @@ import Navbar from './Navbar/Navbar';
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 
-import HistReportes from './Componentes/HistReportes';
-import InfoPersonal from './Componentes/InfoPersonal';
-import Notificaciones from './Componentes/Notificaciones';
-import ProdsFinancieros from './Componentes/ProdsFinancieros';
+import GenerarZKP from './Componentes/GenerarZKP';
+import RepoCliente from './Componentes/RepoCliente';
+import AgregarCliente from './Componentes/AgregarCliente';
+import AgregarProducto from './Componentes/AgregarProducto';
 
 
-const Persona = ({infoContratos})=>{
+const Banco = ({infoContratos})=>{
 
     const [usuario, setUsuario] = useState({
         nombre: null,
-        documento: null,
-        fechaNacimiento: null,
-        fechaExpedicion: null,
-        celular: null,
-        correo: null,
+        nit: null,
+        clave: null,
+        generada: null,
     });
 
     const [contratoActual, setContratoActual] = useState({
@@ -29,14 +27,14 @@ const Persona = ({infoContratos})=>{
 
     useEffect(() => {
 
-        const llama = async ()=>{
+        const getBankInfo = async ()=>{
 
             const provider = new ethers.BrowserProvider(window.ethereum);
             const signer = await provider.getSigner();
                 
             const contract = new ethers.Contract(
-                infoContratos.perfil[0],
-                infoContratos.perfil[1],
+                infoContratos.banco[0],
+                infoContratos.banco[1],
                 signer,
             );
 
@@ -45,15 +43,12 @@ const Persona = ({infoContratos})=>{
             console.log(resultado);
             console.log("=========");
 
-            const nombre = resultado[0][0];
-            const documento = resultado[0][1];
-            const fechaNacimiento = resultado[0][2];
-            const fechaExpedicion = resultado[0][3];
+            const nombre = resultado[0];
+            const nit = resultado[1];
+            const clave = resultado[2];
+            const generada = resultado[3];
 
-            const celular = resultado[1][0];
-            const correo = resultado[1][1];
-
-            setUsuario({nombre, documento, fechaNacimiento, fechaExpedicion, celular, correo});
+            setUsuario({nombre, nit, clave, generada});
 
             setContratoActual({
                 provider: provider,
@@ -61,10 +56,10 @@ const Persona = ({infoContratos})=>{
                 contract: contract,
             });
 
-            console.log({usuario});
+            console.log(usuario);
         }
 
-        llama();
+        getBankInfo();
     }, []);
     
     
@@ -79,14 +74,14 @@ const Persona = ({infoContratos})=>{
         <Outlet />
 
         <Routes>
-          <Route path="/informacion-personal" element={<InfoPersonal user={usuario}/>}/>
-          <Route path="/productos-financieros" element={<ProdsFinancieros infoContratos={infoContratos}/>}/>
-          <Route path="/historial-de-reportes" element={<HistReportes />}/>
-          <Route path="/notificaciones" element={<Notificaciones />}/>
+          <Route path="/generar-zkp" element={<GenerarZKP infoContratos={infoContratos}/>}/>
+          <Route path="/reportar-cliente" element={<RepoCliente/>}/>
+          <Route path="/nuevo-cliente" element={<AgregarCliente infoContratos={infoContratos}/>}/>
+          <Route path="/nuevo-producto" element={<AgregarProducto infoContratos={infoContratos}/>}/>
         </Routes>
     </>
 }
-export default Persona;
+export default Banco;
 
 
 const Perfil = ({usuario})=>{
@@ -95,11 +90,14 @@ const Perfil = ({usuario})=>{
         <h2> Mi Perfil </h2>
         <div className="card">
             <div className="card-body">
-                <div className="card-title"> Nombre </div>
+                <div className="card-title"> {""+usuario.nombre} </div>
                 <br></br>
                 <div className="card-content"> 
                     <div className="row">
-                        {usuario.nombre}
+                        NIT: {""+usuario.nit}
+                    </div>
+                    <div className="row">
+                        Zkp generada: {""+usuario.generada}
                     </div>
                 </div>
             </div>

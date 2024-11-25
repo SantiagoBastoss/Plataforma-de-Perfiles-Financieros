@@ -75,6 +75,8 @@ contract Perfil{
         InfoVariable memory infoVar = InfoVariable(celular, email);
 
         perfiles[msg.sender] = Usuario(infoConst, infoVar, 0);
+
+        usuarios.push(msg.sender);
     }
 
 

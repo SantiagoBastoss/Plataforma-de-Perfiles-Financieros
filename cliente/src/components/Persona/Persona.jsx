@@ -24,12 +24,12 @@ const Persona = ({infoContratos})=>{
         provider: null,
         signer: null,
         contract: null,
-      })
+    })
 
 
     useEffect(() => {
 
-        const llama = async ()=>{
+        const getUserInfo = async ()=>{
 
             const provider = new ethers.BrowserProvider(window.ethereum);
             const signer = await provider.getSigner();
@@ -64,7 +64,7 @@ const Persona = ({infoContratos})=>{
             console.log({usuario});
         }
 
-        llama();
+        getUserInfo();
     }, []);
     
     
@@ -80,7 +80,7 @@ const Persona = ({infoContratos})=>{
 
         <Routes>
           <Route path="/informacion-personal" element={<InfoPersonal user={usuario}/>}/>
-          <Route path="/productos-financieros" element={<ProdsFinancieros infoContratos={infoContratos}/>}/>
+          <Route path="/productos-financieros" element={<ProdsFinancieros infoContratos={infoContratos} usuario={usuario}/>}/>
           <Route path="/historial-de-reportes" element={<HistReportes />}/>
           <Route path="/notificaciones" element={<Notificaciones />}/>
         </Routes>

@@ -2,32 +2,35 @@ const snarkjs = require("snarkjs");
 const fs = require("fs");
 
 async function run() {
-    try {
-        const { proof, publicSignals } = await snarkjs.groth16.fullProve({a: 89, b: 43, c: 5, d: 1585804, e: 3}, "./zkp/autenticador_js/autenticador.wasm", "./zkp/autenticador_0001.zkey");
+    const { proof, publicSignals } = await snarkjs.groth16.fullProve({a: 80240, b: 19876, c: 65432, d: 2197103190161320, e: 3}, "./zkp/autenticador_js/autenticador.wasm", "./zkp/autenticador_0001.zkey");
 
-        console.log("Proof: ");
-        console.log(JSON.stringify(proof, null, 1));
+    const  prueba  = await snarkjs.groth16.exportSolidityCallData(proof, publicSignals);
 
-        const vKey = JSON.parse(fs.readFileSync("./zkp/verification_key.json"));
 
-        const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
+    console.log("Prueba: ");
+    console.log(prueba);
 
-        if (res === true) {
-            console.log("Verification OK");
-        } else {
-            console.log("Invalid proof");
-        }
+    console.log("Proof: ");
+    console.log(JSON.stringify(proof, null, 1));
 
-        (await circomlib.buildPoseidon()).arguments
+    console.log("PRUEBA: ");
 
-        return true;
+    console.log(prueba.slice(0, 140));
+    console.log(prueba.slice(141, 424));
+    console.log(prueba.slice(425, 565));
+    console.log(prueba.slice(566, 843));
 
-    } catch (error) {
-        console.log(error)
+    const vKey = JSON.parse(fs.readFileSync("./zkp/verification_key.json"));
+    
+
+    const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
+
+    if (res === true) {
+        console.log("Verification OK");
+    } else {
+        console.log("Invalid proof");
     }
 
-    console.log("Si se hace");
-    return false;
 }
 
 run().then(() => {

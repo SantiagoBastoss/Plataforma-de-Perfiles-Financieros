@@ -1,8 +1,8 @@
 const { buildModule } = require("@nomicfoundation/hardhat-ignition/modules");
 
-module.exports = buildModule("ContratoBanco", (m) => {
+module.exports = buildModule("ContratoBanco12", (m) => {
 
-  const contrato = m.contract("Banco", ["Bancolombia", 123456789, 987654321]);
+  const contrato = m.contract("Banco", []);
 
   return { contrato };
 });

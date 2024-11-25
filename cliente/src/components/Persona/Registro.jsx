@@ -32,7 +32,7 @@ const Registro = ({contratos})=>{
             );
 
             const transaction = await contract.registro(nombre, documento, fechaNacimiento, fechaExpedicion, celular, correo);
-            await transaction.wait();
+            //await transaction.wait();
 
             alert("Registro exitoso");
             navigate("/persona")
@@ -55,7 +55,7 @@ const Registro = ({contratos})=>{
         setAccount(cuenta);
         alert("Cuenta conectada exitosamente");
     }
-    
+
 
     return <>
         <h2>Registro Persona</h2>
